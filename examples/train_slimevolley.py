@@ -40,6 +40,7 @@ import argparse
 import os
 import shutil
 import jax
+from jax.tree_util import tree_map
 
 from evojax.task.slimevolley import SlimeVolley
 from evojax.policy.mlp import MLPPolicy
@@ -74,6 +75,12 @@ def parse_args():
         '--debug', action='store_true', help='Debug mode.')
     config, _ = parser.parse_known_args()
     return config
+
+def unbatch_state(state, i=0):
+    return tree_map(
+        lambda x: x[i] if hasattr(x, "ndim") and x.ndim >= 1 else x,
+        state
+    )
 
 
 def main(config):
@@ -139,7 +146,9 @@ def main(config):
     for _ in range(max_steps):
         action, policy_state = action_fn(task_state, best_params, policy_state)
         task_state, reward, done = step_fn(task_state, action)
-        screens.append(SlimeVolley.render(task_state))
+        # screens.append(SlimeVolley.render(task_state))
+        screens.append(SlimeVolley.render(unbatch_state(task_state, 0)))
+
 
     gif_file = os.path.join(log_dir, 'slimevolley.gif')
     screens[0].save(gif_file, save_all=True, append_images=screens[1:],

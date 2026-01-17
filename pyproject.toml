@@ -1,0 +1,16 @@
+[project]
+name = "evojax-experiment"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "evojax>=0.2.17",
+    "ipykernel>=7.1.0",
+    "jax[cuda13]>=0.8.2",
+    "jupyter>=1.1.1",
+    "opencv-python>=4.12.0.88",
+    "pyvirtualdisplay>=3.0",
+    "seaborn>=0.13.2",
+    "setuptools>=80.9.0",
+]
